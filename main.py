@@ -9,7 +9,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle("MapVision v0.1")
+        self.setWindowTitle("MapVision v0.2")
         self.search.clicked.connect(self.showing)
 
     def showing(self):
