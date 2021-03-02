@@ -25,6 +25,18 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
                 file.write(result.content)
             self.map.setPixmap(QtGui.QPixmap("data/map.png"))
 
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_PageUp:
+            scaling = int(self.scale.text())
+            if scaling < 17:
+                self.scale.setText(str(scaling + 1))
+            self.showing()
+        elif event.key() == QtCore.Qt.Key_PageDown:
+            scaling = int(self.scale.text())
+            if scaling > 0:
+                self.scale.setText(str(scaling - 1))
+            self.showing()
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
