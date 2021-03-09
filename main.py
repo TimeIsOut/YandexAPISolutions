@@ -51,13 +51,13 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
             # изменение по формуле: предидущее значение - ((18 - масштаб) / масштаб ** 2.5)
             self.showing()  # отрисовка карты
         elif event.key() == QtCore.Qt.Key_Left:
-            lat = float(self.lon.text())  # текущая долгота
+            lat = float(self.lat.text())  # текущая долгота
             scaling = int(self.scale.text())  # масштаб карты
             self.lat.setText(str(lat - ((18 - scaling) / scaling ** 2.5)))
             # изменение по формуле: предыдущее значение + ((18 - масштаб) / масштаб ** 2.5)
             self.showing()  # отрисовка карты
         elif event.key() == QtCore.Qt.Key_Right:
-            lat = float(self.lon.text())  # текущая долгота
+            lat = float(self.lat.text())  # текущая долгота
             scaling = int(self.scale.text())  # масштаб карты
             self.lat.setText(str(lat + ((18 - scaling) / scaling ** 2.5)))
             # изменение по формуле: предидущее значение - ((18 - масштаб) / масштаб ** 2.5)
