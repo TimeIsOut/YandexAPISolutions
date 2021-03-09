@@ -9,7 +9,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle("MapVision v0.2")
+        self.setWindowTitle("MapVision v0.3")
         self.search.clicked.connect(self.showing)
 
     def showing(self):
@@ -38,30 +38,35 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
             if scaling > 0:
                 self.scale.setText(str(scaling - 1))
             self.showing()
+
         elif event.key() == QtCore.Qt.Key_Up:  # нажатие на стрелку вверх
             lon = float(self.lon.text())  # текущая широта
             scaling = int(self.scale.text())  # масштаб карты
-            self.lon.setText(str(lon + ((18 - scaling) / scaling ** 2.5)))
-            # изменение по формуле: предидущее значение + ((18 - масштаб) / масштаб ** 2.5)
-            self.showing()  # отрисовка карты
+            if lon + ((18 - scaling) / scaling ** 2.5) < 80:
+                self.lon.setText(str(lon + ((18 - scaling) / scaling ** 2.5)))
+                # изменение по формуле: предидущее значение + ((18 - масштаб) / масштаб ** 2.5)
+                self.showing()  # отрисовка карты
         elif event.key() == QtCore.Qt.Key_Down:
             lon = float(self.lon.text())  # текущая широта
             scaling = int(self.scale.text())  # масштаб карты
-            self.lon.setText(str(lon - ((18 - scaling) / scaling ** 2.5)))
-            # изменение по формуле: предидущее значение - ((18 - масштаб) / масштаб ** 2.5)
-            self.showing()  # отрисовка карты
+            if lon - ((18 - scaling) / scaling ** 2.5) > -80:
+                self.lon.setText(str(lon - ((18 - scaling) / scaling ** 2.5)))
+                # изменение по формуле: предидущее значение - ((18 - масштаб) / масштаб ** 2.5)
+                self.showing()  # отрисовка карты
         elif event.key() == QtCore.Qt.Key_Left:
             lat = float(self.lat.text())  # текущая долгота
             scaling = int(self.scale.text())  # масштаб карты
-            self.lat.setText(str(lat - ((18 - scaling) / scaling ** 2.5)))
-            # изменение по формуле: предыдущее значение + ((18 - масштаб) / масштаб ** 2.5)
-            self.showing()  # отрисовка карты
+            if lat - ((18 - scaling) / scaling ** 2.5) > -180:
+                self.lat.setText(str(lat - ((18 - scaling) / scaling ** 2.5)))
+                # изменение по формуле: предыдущее значение + ((18 - масштаб) / масштаб ** 2.5)
+                self.showing()  # отрисовка карты
         elif event.key() == QtCore.Qt.Key_Right:
             lat = float(self.lat.text())  # текущая долгота
             scaling = int(self.scale.text())  # масштаб карты
-            self.lat.setText(str(lat + ((18 - scaling) / scaling ** 2.5)))
-            # изменение по формуле: предидущее значение - ((18 - масштаб) / масштаб ** 2.5)
-            self.showing()  # отрисовка карты
+            if lat + ((18 - scaling) / scaling ** 2.5) < 180:
+                self.lat.setText(str(lat + ((18 - scaling) / scaling ** 2.5)))
+                # изменение по формуле: предидущее значение - ((18 - масштаб) / масштаб ** 2.5)
+                self.showing()  # отрисовка карты
 
 
 if __name__ == "__main__":

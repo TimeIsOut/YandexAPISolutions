@@ -48,6 +48,6 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.search.setText(_translate("Form", "Вывод"))
-        self.label.setText(_translate("Form", "Ширина:"))
+        self.label.setText(_translate("Form", "Широта:"))
         self.label_2.setText(_translate("Form", "Долгота:"))
         self.label_3.setText(_translate("Form", "Масштабирование(0-17):"))
