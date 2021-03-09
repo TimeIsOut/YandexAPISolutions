@@ -33,6 +33,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
             self.f = 1
             for childWidget in self.findChildren(QtWidgets.QWidget):
                 childWidget.setFocusPolicy(QtCore.Qt.ClickFocus)
+                childWidget.clearFocus()
 
     def onClicked(self):
         if self.f:
