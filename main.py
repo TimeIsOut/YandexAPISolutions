@@ -9,6 +9,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
     def __init__(self):
         super().__init__()
         self.f = 0
+        self.pt = ''  # для хранения точки на карте
         self.setupUi(self)
         self.setWindowTitle("MapVision v0.3")
         self.search.clicked.connect(self.showing)
@@ -48,10 +49,11 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
                 self.lon.setText(str(toponym_lattitude))
                 # подстановка координат найденного адреса и перемещение на него
 
-                pt = f'{toponym_longitude},{toponym_lattitude},round'
-                # данные точки
+                self.pt = f'{toponym_longitude},{toponym_lattitude},round'
+                # перезапись данных точки
 
-                request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}&pt={pt}"
+        if bool(self.pt):  # если есть запись точки, то 'рисую' её
+            request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}&pt={self.pt}"
         else:
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}"
 
