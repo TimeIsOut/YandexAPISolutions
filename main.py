@@ -20,7 +20,41 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         dic = {0: "map", 1: "sat", 2: "sat,skl"}
         self.data = [self.map_showing.isChecked(), self.sattelite_showing.isChecked(), self.gibrid_showing.isChecked()]
         how_showed = dic[self.data.index(1)]
-        request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}"
+
+        if bool(str(self.requested.toPlainText())):  # если поле с адресом не пусто
+            geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
+
+            geocoder_params = {
+                "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
+                "geocode": self.requested.toPlainText(),
+                "format": "json"
+            }
+
+            response = requests.get(geocoder_api_server, params=geocoder_params)
+            # запрос у геокодера по введённому адресу
+
+            if response:
+                # Преобразуем ответ в json-объект
+                json_response = response.json()
+                # Получаем первый топоним из ответа геокодера.
+                toponym = json_response["response"]["GeoObjectCollection"][
+                    "featureMember"][0]["GeoObject"]
+                # Координаты центра топонима:
+                toponym_coodrinates = toponym["Point"]["pos"]
+                # Долгота и широта:
+                toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
+
+                self.lat.setText(str(toponym_longitude))
+                self.lon.setText(str(toponym_lattitude))
+                # подстановка координат найденного адреса и перемещение на него
+
+                pt = f'{toponym_longitude},{toponym_lattitude},round'
+                # данные точки
+
+                request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}&pt={pt}"
+        else:
+            request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}"
+
         result = requests.get(request)
         if result:
             try:
@@ -34,6 +68,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
             for childWidget in self.findChildren(QtWidgets.QWidget):
                 childWidget.setFocusPolicy(QtCore.Qt.ClickFocus)
                 childWidget.clearFocus()
+
 
     def onClicked(self):
         if self.f:
@@ -51,6 +86,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
             if scaling > 0:
                 self.scale.setText(str(scaling - 1))
             self.showing()
+
         elif event.key() == QtCore.Qt.Key_Up:  # нажатие на стрелку вверх
             lon = float(self.lon.text())  # текущая широта
             scaling = int(self.scale.text())  # масштаб карты
@@ -58,6 +94,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
                 self.lon.setText(str(lon + ((18 - scaling) / scaling ** 2.5)))
                 # изменение по формуле: предидущее значение + ((18 - масштаб) / масштаб ** 2.5)
                 self.showing()  # отрисовка карты
+            self.requested.setPlainText('')  # очистка поля поиска адреса
         elif event.key() == QtCore.Qt.Key_Down:
             lon = float(self.lon.text())  # текущая широта
             scaling = int(self.scale.text())  # масштаб карты
@@ -65,6 +102,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
                 self.lon.setText(str(lon - ((18 - scaling) / scaling ** 2.5)))
                 # изменение по формуле: предидущее значение - ((18 - масштаб) / масштаб ** 2.5)
                 self.showing()  # отрисовка карты
+            self.requested.setPlainText('')  # очистка поля поиска адреса
         elif event.key() == QtCore.Qt.Key_Left:
             lat = float(self.lat.text())  # текущая долгота
             scaling = int(self.scale.text())  # масштаб карты
@@ -72,6 +110,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
                 self.lat.setText(str(lat - ((18 - scaling) / scaling ** 2.5)))
                 # изменение по формуле: предыдущее значение + ((18 - масштаб) / масштаб ** 2.5)
                 self.showing()  # отрисовка карты
+            self.requested.setPlainText('')  # очистка поля поиска адреса
         elif event.key() == QtCore.Qt.Key_Right:
             lat = float(self.lat.text())  # текущая долгота
             scaling = int(self.scale.text())  # масштаб карты
@@ -79,6 +118,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
                 self.lat.setText(str(lat + ((18 - scaling) / scaling ** 2.5)))
                 # изменение по формуле: предидущее значение - ((18 - масштаб) / масштаб ** 2.5)
                 self.showing()  # отрисовка карты
+            self.requested.setPlainText('')  # очистка поля поиска адреса
 
 
 if __name__ == "__main__":
