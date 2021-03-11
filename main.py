@@ -11,12 +11,14 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         self.f = 0
         self.pt = ''  # для хранения точки на карте
         self.setupUi(self)
-        self.setWindowTitle("MapVision v0.3")
+        self.setWindowTitle("MapVision v0.4")
         self.search.clicked.connect(self.showing)
         self.map_showing.toggled.connect(self.onClicked)
         self.sattelite_showing.toggled.connect(self.onClicked)
         self.gibrid_showing.toggled.connect(self.onClicked)
         self.clear_dots.clicked.connect(self.clearing)
+        self.other_scale.textChanged.connect(self.writeNew)
+        self.scale.textChanged.connect(self.writeNew)
 
     def showing(self):
         dic = {0: "map", 1: "sat", 2: "sat,skl"}
@@ -81,6 +83,12 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         self.pt = ''
         self.requested.clear()
         self.showing()
+
+    def writeNew(self):
+        if self.sender() == self.other_scale:
+            self.scale.setText(self.other_scale.text())
+        elif self.sender() == self.scale:
+            self.other_scale.setText(self.scale.text())
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_PageUp:
