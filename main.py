@@ -17,6 +17,8 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         self.sattelite_showing.toggled.connect(self.onClicked)
         self.gibrid_showing.toggled.connect(self.onClicked)
         self.clear_dots.clicked.connect(self.clearing)
+        self.other_search.clicked.connect(self.showing)
+        self.other_clear_dots.clicked.connect(self.clearing)
         self.other_scale.textChanged.connect(self.writeNew)
         self.scale.textChanged.connect(self.writeNew)
 
