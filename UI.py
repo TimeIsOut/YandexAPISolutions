@@ -16,7 +16,7 @@ class Ui_Form(object):
         Form.setObjectName("Form")
         Form.resize(751, 470)
         self.search = QtWidgets.QPushButton(Form)
-        self.search.setGeometry(QtCore.QRect(10, 410, 271, 51))
+        self.search.setGeometry(QtCore.QRect(10, 410, 131, 51))
         self.search.setObjectName("search")
         self.label = QtWidgets.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(10, 10, 271, 16))
@@ -60,6 +60,9 @@ class Ui_Form(object):
         self.requested = QtWidgets.QTextEdit(Form)
         self.requested.setGeometry(QtCore.QRect(10, 270, 271, 121))
         self.requested.setObjectName("requested")
+        self.clear_dots = QtWidgets.QPushButton(Form)
+        self.clear_dots.setGeometry(QtCore.QRect(150, 410, 131, 51))
+        self.clear_dots.setObjectName("clear_dots")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -75,3 +78,4 @@ class Ui_Form(object):
         self.sattelite_showing.setText(_translate("Form", "Спутник"))
         self.gibrid_showing.setText(_translate("Form", "Гибрид"))
         self.label_4.setText(_translate("Form", "Интересует какой-то определённый адрес?"))
+        self.clear_dots.setText(_translate("Form", "Очистить"))

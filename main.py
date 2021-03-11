@@ -16,6 +16,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         self.map_showing.toggled.connect(self.onClicked)
         self.sattelite_showing.toggled.connect(self.onClicked)
         self.gibrid_showing.toggled.connect(self.onClicked)
+        self.clear_dots.clicked.connect(self.clearing)
 
     def showing(self):
         dic = {0: "map", 1: "sat", 2: "sat,skl"}
@@ -52,7 +53,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
                 self.pt = f'{toponym_longitude},{toponym_lattitude},round'
                 # перезапись данных точки
 
-        if bool(self.pt):  # если есть запись точки, то 'рисую' её
+        if self.pt:  # если есть запись точки, то 'рисую' её
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}&pt={self.pt}"
         else:
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}"
@@ -76,6 +77,10 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         if self.f:
             self.showing()
 
+    def clearing(self):
+        self.pt = ''
+        self.requested.clear()
+        self.showing()
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_PageUp:
