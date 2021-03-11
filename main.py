@@ -10,6 +10,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         super().__init__()
         self.f = 0
         self.pt = ''  # для хранения точки на карте
+        self.pt_adress = ''  # адрес точки
         self.setupUi(self)
         self.setWindowTitle("MapVision v0.4")
         self.search.clicked.connect(self.showing)
@@ -55,10 +56,13 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
                 # подстановка координат найденного адреса и перемещение на него
 
                 self.pt = f'{toponym_longitude},{toponym_lattitude},round'
-                # перезапись данных точки
+                # перезапись данных точки для api static-maps
+                self.pt_adress = toponym['metaDataProperty']['GeocoderMetaData']['text']
+                # найденный адрес в человекочитаемом формате
 
         if self.pt:  # если есть запись точки, то 'рисую' её
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}&pt={self.pt}"
+            print(self.pt_adress)
         else:
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}"
 
