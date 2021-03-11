@@ -62,7 +62,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
 
         if self.pt:  # если есть запись точки, то 'рисую' её
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}&pt={self.pt}"
-            print(self.pt_adress)
+            self.address.setPlainText(self.pt_adress)  # отображение адреса в поле
         else:
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}"
 
@@ -87,6 +87,8 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
 
     def clearing(self):
         self.pt = ''
+        self.pt_adress = ''
+        self.address.clear()  # очистка поля вывода найденного адреса
         self.requested.clear()
         self.showing()
 
