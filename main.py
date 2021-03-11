@@ -10,7 +10,11 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         super().__init__()
         self.f = 0
         self.pt = ''  # для хранения точки на карте
+
         self.pt_adress = ''  # адрес точки
+        self.pt_index = ''  # индекс точки
+        self.pt_index_flag = True
+
         self.setupUi(self)
         self.setWindowTitle("MapVision v0.4")
         self.search.clicked.connect(self.showing)
@@ -57,12 +61,35 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
 
                 self.pt = f'{toponym_longitude},{toponym_lattitude},round'
                 # перезапись данных точки для api static-maps
-                self.pt_adress = toponym['metaDataProperty']['GeocoderMetaData']['text']
-                # найденный адрес в человекочитаемом формате
+                try:
+                    # найденный адрес в человекочитаемом формате
+                    self.pt_adress = toponym['metaDataProperty']['GeocoderMetaData']['text']
+                except KeyError:
+                    self.pt_adress = 'Адрес не найден'
+                    print('Адрес не найден')
+                    print(toponym)
+
+                try:
+                    self.pt_index = toponym['metaDataProperty']['GeocoderMetaData']['Address']['postal_code']
+                except KeyError:
+                    self.pt_index = 'Индекс не найден'
+                    print('Индекс не найден')
+                    print(toponym)
+
+
+            else:
+                # При ошибке выполнения запроса к geocode-maps.yandex.ru
+                print("Ошибка выполнения запроса:")
+                print("Http статус:", response.status_code, "(", response.reason, ")")
+                sys.exit(1)
 
         if self.pt:  # если есть запись точки, то 'рисую' её
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}&pt={self.pt}"
-            self.address.setPlainText(self.pt_adress)  # отображение адреса в поле
+            # отображение найденного адреса в поле
+            if self.pt_index_flag:
+                self.address.setPlainText(f'{self.pt_adress}\nПочтовый индекс: {self.pt_index}')
+            else:
+                self.address.setPlainText(self.pt_adress)
         else:
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}"
 
