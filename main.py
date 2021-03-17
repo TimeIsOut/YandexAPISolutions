@@ -16,6 +16,10 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         self.pt_index_flag = True
 
         self.setupUi(self)
+
+        self.index.stateChanged.connect(self.showing)
+        self.requested.textChanged.connect(self.showing)
+
         self.setWindowTitle("MapVision v0.4")
         self.search.clicked.connect(self.showing)
         self.map_showing.toggled.connect(self.onClicked)
@@ -86,7 +90,7 @@ class MapVision(QtWidgets.QMainWindow, Ui_Form):
         if self.pt:  # если есть запись точки, то 'рисую' её
             request = f"https://static-maps.yandex.ru/1.x/?ll={self.lat.text()},{self.lon.text()}&z={self.scale.text()}&l={how_showed}&pt={self.pt}"
             # отображение найденного адреса в поле
-            if self.pt_index_flag:
+            if self.index.isChecked():
                 self.address.setPlainText(f'{self.pt_adress}\nПочтовый индекс: {self.pt_index}')
             else:
                 self.address.setPlainText(self.pt_adress)
