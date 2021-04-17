@@ -3,6 +3,7 @@ import sys
 from os import mkdir
 from PyQt5 import QtCore, QtWidgets, QtGui
 from UI import Ui_Form
+from search_org import get_closest_organisation, coord_to_address
 
 
 class MapVision(QtWidgets.QMainWindow, Ui_Form):

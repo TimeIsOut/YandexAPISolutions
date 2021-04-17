@@ -2,6 +2,7 @@ import requests
 
 
 def calculate_distance(coord1, coord2):  # координаты на вход, а на выходе расстояние в метрах
+    # coord1 and coord2 = 'longitude,lattitude'
     x2, y2 = list(map(float, coord2.split(',')))
     x1, y1 = list(map(float, coord1.split(',')))
 
